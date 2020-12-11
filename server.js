@@ -37,3 +37,8 @@ db.on("disconnected", () => console.log("Mongo disconnected"));
 //     }
 //     db.close();
 //   });
+
+Word.find((err, words) => {
+    console.log(words);
+    db.close();
+  });
