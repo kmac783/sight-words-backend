@@ -1,7 +1,7 @@
 ///////////////////////////////////
 // Dependencies
 ///////////////////////////////////
-const express = require('express');
+const express = require("express");
 const mongoose = require("mongoose");
 const Word = require("./word.js");
 
@@ -19,14 +19,16 @@ const PORT = process.env.PORT || 3000;
 ///////////////////////////////////
 // Database Information
 ///////////////////////////////////
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost:27017/" + "words";
+const MONGODB_URI =
+  process.env.MONGODB_URI || "mongodb://localhost:27017/" + "words";
 
-mongoose.connect(MONGODB_URI,
-    { useNewUrlParser: true, useUnifiedTopology: true },
-    () => {
-      console.log("Connection with Mongo established");
-    }
-  );
+mongoose.connect(
+  MONGODB_URI,
+  { useNewUrlParser: true, useUnifiedTopology: true },
+  () => {
+    console.log("Connection with Mongo established");
+  }
+);
 
 ///////////////////////////////////
 // Success and Error Messages
@@ -38,42 +40,44 @@ db.on("disconnected", () => console.log("Mongo disconnected"));
 ///////////////////////////////////
 // Seed DB
 ///////////////////////////////////
-// const seedWord = {
-//     word: "it",
+// const seedWord = [
+//   {
+//     word: "she",
 //     isChild: "true",
-// };
+//   },
+// ];
 // Word.create(seedWord, (error, word) => {
-//     if (error) {
-//       //if there is an error console log it
-//       console.log(error);
-//     } else {
-//       // else show us the created word
-//       console.log(word);
-//     }
-//     db.close();
-//   });
+//   if (error) {
+//     //if there is an error console log it
+//     console.log(error);
+//   } else {
+//     // else show us the created word
+//     console.log(word);
+//   }
+//   db.close();
+// });
 
 ///////////////////////////////////
 // Get all words from the db
 ///////////////////////////////////
 const words = [];
- Word.find({}, "word", (err, word) => {
-     //console.log(words);
-     words.push(word)
-     db.close();
-   });
+Word.find({}, "word", (err, word) => {
+  //console.log(words);
+  words.push(word);
+  db.close();
+});
 
 ///////////////////////////////////
 // Routes
 ///////////////////////////////////
-app.get('/', (req, res) => {
-    console.log(words);
-  });
+app.get("/words", (req, res) => {
+  // console.log(words);
+  return res.send(words);
+});
 
 ///////////////////////////////////
 // Listener
 ///////////////////////////////////
-app.listen(PORT,() => {
-    console.log('listening on port' , PORT);
+app.listen(PORT, () => {
+  console.log("listening on port", PORT);
 });
-
