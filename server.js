@@ -33,7 +33,7 @@ mongoose.connect(
 ///////////////////////////////////
 // Success and Error Messages
 ///////////////////////////////////
-db.on("error", (err) => console.log(err.message + " is Mongo not running?"));
+db.on("error", (err) => console.log(err.message + " is Mongo running?"));
 db.on("connected", () => console.log("Mongo connected: ", MONGODB_URI));
 db.on("disconnected", () => console.log("Mongo disconnected"));
 
@@ -60,20 +60,39 @@ db.on("disconnected", () => console.log("Mongo disconnected"));
 ///////////////////////////////////
 // Get all words from the db
 ///////////////////////////////////
-const words = [];
-Word.find({}, "word", (err, word) => {
-  //console.log(words);
-  words.push(word);
-  db.close();
+const allWords = [];
+const childWords = [];
+const adultWords = [];
+
+Word.find((err, word) => {
+    allWords.push(word)
+    db.close();
+});
+
+ Word.find({isChild: 'true'}, (err, word) => {
+    childWords.push(word)
+    db.close();
+});
+
+Word.find({isChild: 'false'}, (err, word) => {
+    adultWords.push(word)
+    db.close();
 });
 
 ///////////////////////////////////
 // Routes
 ///////////////////////////////////
-app.get("/words", (req, res) => {
-  // console.log(words);
-  return res.send(words);
-});
+app.get('/words', (req, res) => {
+    return res.send(allWords);
+  });
+
+app.get('/child', (req, res) => {
+    return res.send(childWords);
+  });
+
+app.get('/adult', (req, res) => {
+    return res.send(adultWords);
+  });
 
 ///////////////////////////////////
 // Listener
